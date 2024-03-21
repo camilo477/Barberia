@@ -1,0 +1,302 @@
+CREATE DATABASE barberia;
+USE barberia
+
+
+
+CREATE TABLE nominas (
+    id_nominas INT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id INT,
+    semana DATE,
+    total DECIMAL(10, 2)
+);
+
+CREATE TABLE gastos_barberia (
+    id_barberia INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(255),
+    monto DECIMAL(10, 2),
+    fecha DATE
+);
+
+CREATE TABLE detalle_nominas (
+    id_detalle_nominas INT AUTO_INCREMENT PRIMARY KEY,
+    nomina_id INT,
+    concepto VARCHAR(255),
+    cantidad DECIMAL(10, 2)
+);
+
+CREATE TABLE horarios (
+    id_horarios INT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id INT,
+    fecha DATE,
+    hora_inicio TIME,
+    hora_fin TIME
+);
+
+CREATE TABLE historial_clientes (
+    id_historial_clientes INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    accion ENUM('reserva_cita', 'cancelacion_cita', 'feedback', 'compra', 'queja', 'otro'),
+    detalle_accion TEXT
+);
+
+
+
+CREATE TABLE registro_pagos
+ (
+    id_registro_pagos INT AUTO_INCREMENT PRIMARY KEY,
+    cantidad DECIMAL(10,2),
+    fecha DATE
+);
+
+CREATE TABLE citas (
+    id_citas INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT(11),
+    empleado_id INT(11),
+    fecha DATETIME
+
+);
+
+CREATE TABLE clientes (
+    id_clientes INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    telefono VARCHAR(20),
+    correo VARCHAR(255)
+);
+
+CREATE TABLE empleados (
+    id_empleados INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    contrasena VARCHAR(255),
+    cargo VARCHAR(255),
+    fecha_contratacion DATE,
+    email VARCHAR(255)
+);
+
+CREATE TABLE historial_pagos (
+    id_historial_pagos INT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id INT(11),
+    fecha DATE,
+    monto DECIMAL(10,2)
+);
+
+CREATE TABLE ventas (
+    id_ventas INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT(11),
+    fecha DATE,
+    total DECIMAL(10,2)
+);
+
+CREATE TABLE pocentajes_pago (
+    id_pocentajes_pago INT AUTO_INCREMENT PRIMARY KEY,
+    tipo_servicio VARCHAR(255),
+    porcentaje_empleado DECIMAL(5,2),
+    porcentaje_dueno DECIMAL(5,2)
+);
+
+CREATE TABLE turno (
+    id_turno INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATE,
+    hora_inicio TIME,
+    hora_fin TIME
+);
+
+CREATE TABLE proveedores (
+    id_proveedores INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    telefono VARCHAR(20),
+    correo VARCHAR(255)
+);
+
+CREATE TABLE horarios_empleados (
+    id_horarios_empleados INT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id INT,
+    dia_semana INT,
+    hora_entrada TIME,
+    hora_salida TIME
+);
+
+CREATE TABLE promociones (
+    id_promociones INT AUTO_INCREMENT PRIMARY KEY,
+    servicio_id INT(11),
+    descripcion VARCHAR(255),
+    descuento DECIMAL(5,2),
+    fecha_inicio DATE,
+    fecha_fin DATE,
+    configuracion_id INT(11)
+);
+
+CREATE TABLE servicios_realizados (
+    id_servicios_realizados INT AUTO_INCREMENT PRIMARY KEY,
+    empleado_id INT(11),
+    tipo_servicio VARCHAR(255),
+    fecha DATE,
+    hora TIME
+);
+
+
+CREATE TABLE feedback_clientes (
+    id_feedback_clientes INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT,
+    comentario TEXT,
+    calificacion INT,
+    fecha_hora DATETIME,
+    servicios_realizados_servicio_id INT(11)
+);
+
+
+
+CREATE TABLE inventario (
+    id_inventario INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    cantidad INT,
+    precio_unitario DECIMAL(10, 2)
+);
+
+CREATE TABLE inventario_proveedor (
+    id_inventario_proveedor INT AUTO_INCREMENT PRIMARY KEY,
+    proveedor_id INT,
+    producto_id INT,
+    cantidad INT
+);
+
+
+
+CREATE TABLE barberia (
+    id_barberia INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255),
+    direccion VARCHAR(255),
+    telefono VARCHAR(20),
+    correo VARCHAR(255)
+);
+
+CREATE TABLE barberia_turno (
+    barberia_turno_id INT AUTO_INCREMENT PRIMARY KEY,
+    id_barberia INT,
+    id_turno INT,
+    FOREIGN KEY (id_barberia) REFERENCES barberia(id_barberia),
+    FOREIGN KEY (id_turno) REFERENCES turno(id_turno)
+);
+
+ALTER TABLE turno
+ADD COLUMN empleado_id INT,
+ADD FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE historial_clientes
+ADD COLUMN cliente_id INT,
+ADD FOREIGN KEY (cliente_id) REFERENCES clientes(id_clientes);
+
+ALTER TABLE ventas
+ADD FOREIGN KEY (cliente_id) REFERENCES clientes(id_clientes);
+
+ALTER TABLE nominas
+ADD FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE detalle_nominas
+ADD FOREIGN KEY (nomina_id) REFERENCES nominas(id_nominas);
+
+
+ALTER TABLE horarios
+ADD FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE historial_pagos
+ADD FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE servicios_realizados
+ADD FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+
+
+ALTER TABLE citas
+ADD CONSTRAINT fk_empleado
+FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE citas
+ADD CONSTRAINT fk_cliente
+FOREIGN KEY (cliente_id) REFERENCES clientes(id_clientes);
+
+
+ALTER TABLE feedback_clientes
+ADD CONSTRAINT fk_cliente_feedback
+FOREIGN KEY (cliente_id) REFERENCES clientes(id_clientes);
+
+ALTER TABLE inventario_proveedor
+ADD CONSTRAINT fk_proveedor_inventario
+FOREIGN KEY (proveedor_id) REFERENCES proveedores(id_proveedores);
+
+ALTER TABLE inventario
+ADD COLUMN proveedor_id INT,
+ADD CONSTRAINT fk_proveedor_inventario
+FOREIGN KEY (proveedor_id) REFERENCES proveedores(id_proveedores);
+
+ALTER TABLE gastos_barberia
+ADD COLUMN barberia_id INT;
+ADD CONSTRAINT fk_barberia_gastos
+FOREIGN KEY (barberia_id) REFERENCES barberia(id_barberia);
+
+
+ALTER TABLE registro_pagos
+ADD COLUMN barberia_id INT,
+ADD CONSTRAINT fk_barberia_pagos
+FOREIGN KEY (barberia_id) REFERENCES barberia(id_barberia);
+
+ALTER TABLE detalle_nominas
+ADD COLUMN porcentaje_pago_id INT,
+ADD CONSTRAINT fk_porcentaje_pago_detalle_nominas
+FOREIGN KEY (porcentaje_pago_id) REFERENCES pocentajes_pago(id_pocentajes_pago);
+
+ALTER TABLE inventario
+ADD COLUMN barberia_id INT,
+ADD CONSTRAINT fk_inventario_barberia
+FOREIGN KEY (barberia_id) REFERENCES barberia(id_barberia);
+
+ALTER TABLE historial_clientes
+ADD COLUMN cliente_id INT,
+ADD CONSTRAINT fk_cliente_historial
+FOREIGN KEY (cliente_id) REFERENCES clientes(id_clientes);
+
+ALTER TABLE horarios_empleados
+ADD COLUMN empleado_id INT;
+
+ALTER TABLE horarios_empleados
+ADD FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE ventas
+ADD COLUMN servicios_realizados_id INT;
+
+ALTER TABLE ventas
+ADD FOREIGN KEY (servicios_realizados_id) REFERENCES servicios_realizados(id_servicios_realizados);
+
+ALTER TABLE citas
+ADD COLUMN empleado_id INT,
+ADD CONSTRAINT fk_empleado_citas
+FOREIGN KEY (empleado_id) REFERENCES empleados(id_empleados);
+
+ALTER TABLE inventario_proveedor
+ADD FOREIGN KEY (producto_id) REFERENCES inventario(id_inventario);
+
+ALTER TABLE gastos_barberia
+ADD FOREIGN KEY (barberia_id) REFERENCES barberia(id_barberia);
+
+
+ALTER TABLE historial_clientes
+ADD FOREIGN KEY (cliente_id) REFERENCES clientes(id_clientes);
+
+ALTER TABLE servicios_realizados
+ADD promocion_id INT(11);
+
+ALTER TABLE detalle_nominas
+
+ADD servicio_realizado_id INT(11);
+
+ALTER TABLE servicios_realizados
+ADD reserva_id INT(11);
+
+ALTER TABLE servicios_realizados
+ADD venta_id INT(11);
+
+ALTER TABLE servicios_realizados
+DROP COLUMN promocion_id;  -- Assuming a misspelling or needing to recreate
+
+ALTER TABLE servicios_realizados
+ADD promocion_id INT(11);
