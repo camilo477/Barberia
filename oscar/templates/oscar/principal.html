@@ -1,0 +1,48 @@
+{% extends 'base2.html' %}
+
+{% block title %}Página Principal{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="bienvenido-container">
+        <h3 class="bienvenido-title">Bienvenido</h3>
+        {% if nombre_usuario %}
+            <p class="bienvenido-info">Nombre de usuario: <span>{{ nombre_usuario }}</span></p>
+            {% if id_empleado %}
+                <p class="bienvenido-info">ID de empleado: <span>{{ id_empleado }}</span></p>
+            {% endif %}
+        {% else %}
+            <p class="bienvenido-info">No se encontró el nombre del usuario.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+<!-- Aquí se coloca el bloque de código CSS -->
+<style>
+    .bienvenido-container {
+        background-color: #f2f2f2;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .bienvenido-title {
+        font-size: 30px; /* Aumenta el tamaño del título */
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .bienvenido-info {
+        font-size: 24px; /* Aumenta el tamaño del texto de información */
+        color: #666;
+        margin-bottom: 10px;
+    }
+
+    .bienvenido-info span {
+        font-weight: bold;
+        color: #000;
+    }
+</style>

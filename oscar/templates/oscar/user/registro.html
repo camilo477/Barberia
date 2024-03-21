@@ -1,0 +1,61 @@
+{% extends "oscar/base.html" %}
+
+{% block content %}
+    <div class="container">
+        <form action="{% url 'registro' %}" method="post">
+            {% csrf_token %}
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Registro</div>
+                    <div class="panel-body">
+                        {% if error_message %}
+                            <p class="bg-danger p-d ml-b">{{ error_message }}</p>
+                        {% endif %}
+                        <div class="form-group clearfix">
+                            <label for="nombre" class="col-md-4 control-label text-right">Nombre:</label>
+                            <div class="col-md-6">
+                                <input name="nombre" value="" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="correo" class="col-md-4 control-label text-right">Correo:</label>
+                            <div class="col-md-6">
+                                <input name="correo" value="" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="contrasena" class="col-md-4 control-label text-right">Contraseña:</label>
+                            <div class="col-md-6">
+                                <input name="contrasena" type="password" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group clearfix">
+                            <label for="cargo" class="col-md-4 control-label text-right">Cargo:</label>
+                            <div class="col-md-6">
+                                <input name="cargo" value="" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-md-offset-4">
+                            <input name="registrarse" type="submit" value="Registrarse" class="btn btn-success" /> &nbsp;
+                            <a href="/login">Iniciar Sesión</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+       
+
+        <!-- Resultados de la consulta a la base de datos -->
+        <div id="database-results">
+            {% if database_results %}
+                <p>Resultados de la consulta a la base de datos:</p>
+                <ul>
+                {% for result in database_results %}
+                    <li>{{ result }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Barberia Oscar{% endblock %}</title>
+    {% load static %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'oscar/styles.css' %}">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <header>
+        <div class="nav-side-menu">
+            <div class="brand">Barberia Oscar</div>
+            <p id="nombre-usuario">
+                {% if nombre_usuario %}
+                    {{ nombre_usuario }}
+                    {% if id_empleado %}
+                        (ID: {{ id_empleado }})
+                    {% endif %}
+                {% else %}
+                    No se encontró el nombre del usuario.
+                {% endif %}
+            </p>
+        <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+      
+        <div class="menu-list">
+            <ul id="menu-content" class="menu-content collapse out">
+                <li>
+                    <a href="{% url 'turnos' %}">
+                        <i class="fa fa-users fa-lg"></i> Turnos
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'servicios' %}">
+                        <i class="fa fa-users fa-lg"></i> Servicios
+                    </a>
+                </li>
+                <!-- Agrega aquí los otros elementos del menú -->
+            </ul>
+        </div>
+    </div>
+    </header>
+
+    <div id="contenido-dinamico" class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

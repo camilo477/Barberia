@@ -1,0 +1,37 @@
+{% extends 'base2.html' %}
+
+{% block title %}Servicios{% endblock %}
+
+{% block content %}
+<div id="form-servicios" class="container">
+    <h3 style="margin-bottom: 20px; text-align: center;">Formulario de Servicios</h3>
+    {% if error_message %}
+    <p style="color: red; text-align: center;">{{ error_message }}</p>
+    {% endif %}
+    <form id="servicios-form" method="post" action="{% url 'insertar_servicio' %}">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            <label for="servicio" style="font-weight: bold;">Servicio realizado:</label>
+            <select id="servicio" name="servicio" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+                <option value="corte">Corte</option>
+                <option value="barba">Barba</option>
+                <option value="tintura">Tintura</option>
+                <option value="peinados">Peinados</option>
+                <!-- Agrega aquí más opciones si es necesario -->
+            </select>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label for="fecha" style="font-weight: bold;">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label for="hora" style="font-weight: bold;">Hora:</label>
+            <input type="time" id="hora" name="hora" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        
+        <div style="text-align: center;">
+            <input type="submit" value="Enviar" id="enviar-servicio" style="background-color: #4CAF50; color: white; padding: 12px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px;">
+        </div>
+    </form>
+</div>
+{% endblock %}
